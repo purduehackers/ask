@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
             style: { background: "#111", border: "1px solid #333", color: "#ededed" },
           }}
         />
+        <Analytics />
       </body>
     </html>
   );
