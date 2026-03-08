@@ -7,8 +7,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { Logomark } from "@/components/logomark";
 import { PlusIcon, CopyIcon, CheckIcon } from "lucide-react";
 import { env } from "@/env";
 
@@ -93,7 +93,7 @@ export default function PlatformPage() {
           className="flex items-center gap-2 font-display text-lg hover:text-muted-foreground"
           aria-label="Ask Purdue Hackers home"
         >
-          <Image src="/icon.svg" alt="" width={24} height={24} aria-hidden="true" />
+          <Logomark />
           Ask
         </Link>
         <Button

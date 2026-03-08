@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { Logomark } from "./logomark";
 import { SignOutButton } from "./sign-out-button";
 
 export function Header({
@@ -16,7 +16,7 @@ export function Header({
         className="flex items-center gap-2 font-display text-xl"
         aria-label="Ask Purdue Hackers home"
       >
-        <Image src="/icon.svg" alt="" width={24} height={24} aria-hidden="true" />
+        <Logomark />
         <span className="mt-2px">Ask</span>
       </Link>
       <nav aria-label="Main navigation" className="flex items-center gap-3">

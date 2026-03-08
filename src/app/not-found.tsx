@@ -1,11 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
+import { Logomark } from "@/components/logomark";
 
 export default function NotFound() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center px-4">
       <div className="flex flex-col items-center gap-6 text-center">
-        <Image src="/icon.svg" alt="" width={40} height={40} aria-hidden="true" />
+        <Logomark size={40} />
         <div className="flex flex-col gap-2">
           <h1 className="font-display text-2xl text-foreground">Page not found</h1>
           <p className="text-sm text-muted-foreground">
