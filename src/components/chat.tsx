@@ -2,6 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { WorkflowChatTransport } from "@workflow/ai";
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { nanoid } from "nanoid";
@@ -28,6 +29,7 @@ export function ChatUI({
   initialTitle?: string;
   user?: { name?: string; id?: string } | null;
 }) {
+  const router = useRouter();
   const [input, setInput] = useState("");
   const [chatId] = useState(() => initialChatId ?? nanoid(12));
   const [title, setTitle] = useState(initialTitle);
@@ -137,7 +139,7 @@ export function ChatUI({
   useEffect(() => {
     if (isStreaming && !hasRedirected.current) {
       hasRedirected.current = true;
-      window.history.replaceState(null, "", `/c/${chatId}`);
+      router.replace(`/c/${chatId}`);
     }
   }, [isStreaming, chatId]);
 
