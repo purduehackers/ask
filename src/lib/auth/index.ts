@@ -45,6 +45,7 @@ export const auth = betterAuth({
     }),
     apiKey({
       defaultPrefix: "ph_ask_",
+      rateLimit: { enabled: false },
     }),
   ],
 });
