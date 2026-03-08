@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ask Purdue Hackers
 
-## Getting Started
+An AI-powered Q&A tool that answers questions about Purdue Hackers using their Notion workspace as a knowledge base. Available as both a web chat interface and a programmatic API.
 
-First, run the development server:
+## How it works
+
+The app syncs Purdue Hackers' Notion workspace into a cached filesystem. When a user asks a question, an AI agent (Claude Sonnet) navigates and searches the filesystem using bash commands to find relevant information, then synthesizes a natural-language answer.
+
+## Stack
+
+- **Framework**: Next.js 16, React 19
+- **AI**: Vercel AI SDK v6, Anthropic Claude Sonnet
+- **Auth**: Better Auth with Purdue Hackers Passport Auth
+- **Database**: Turso (libsql) via Drizzle ORM
+- **Notion sync**: AgentFS SDK + bash-tool for filesystem exploration
+- **Styling**: Tailwind CSS v4, shadcn/ui
+- **Markdown rendering**: streamdown
+
+## Getting started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) runtime
+- A Turso database for auth/API keys
+- A second Turso database (AgentFS) for the Notion cache
+- A Notion API token with access to the Purdue Hackers workspace
+- Purdue Hackers ID OAuth credentials
+
+### Environment variables
+
+Create a `.env.local` file:
+
+```
+NOTION_API_TOKEN=
+AGENTFS_DATABASE_URL=
+AGENTFS_AUTH_TOKEN=
+TURSO_DATABASE_URL=
+TURSO_AUTH_TOKEN=
+CRON_SECRET=
+BETTER_AUTH_SECRET=
+PHACK_CLIENT_ID=
+PHACK_CLIENT_SECRET=
+NEXT_PUBLIC_APP_URL=
+```
+
+### Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
+bun run db:generate
+bun run db:migrate
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## API
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Web UI
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visit `/` to use the chat interface. Sign in with Purdue Hackers ID for higher rate limits.
 
-## Learn More
+### Programmatic API
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+curl -X POST https://your-domain/api/query \
+  -H "Authorization: Bearer ph_ask_..." \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "When is the next hackathon?"}'
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Returns `{ "result": "..." }`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Rate limits
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Anonymous (web UI): 5 requests/hour
+- Authenticated: 30 requests/hour
