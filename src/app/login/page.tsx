@@ -58,12 +58,6 @@ function LoginContent() {
         >
           Sign In with Passport
         </Button>
-        <Link
-          href={redirectTo}
-          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Continue without signing in
-        </Link>
       </div>
     </div>
   );
