@@ -11,8 +11,8 @@ let _notion: NotionFsClient | null = null;
 
 export async function getCache(): Promise<CacheService> {
   if (!_cache) {
-    const db = new RemoteDatabase(env.AGENTFS_DATABASE_URL, {
-      authToken: env.AGENTFS_AUTH_TOKEN,
+    const db = new RemoteDatabase(env.AGENTFS_TURSO_DATABASE_URL, {
+      authToken: env.AGENTFS_TURSO_AUTH_TOKEN,
     });
     const agent = await AgentFS.openWith(db as unknown as DatabasePromise);
     _cache = new CacheService(agent);

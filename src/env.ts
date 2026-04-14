@@ -4,8 +4,8 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     NOTION_API_TOKEN: z.string().min(1),
-    AGENTFS_DATABASE_URL: z.string().min(1),
-    AGENTFS_AUTH_TOKEN: z.string().min(1).optional(),
+    AGENTFS_TURSO_DATABASE_URL: z.string().min(1),
+    AGENTFS_TURSO_AUTH_TOKEN: z.string().min(1).optional(),
     TURSO_DATABASE_URL: z.string().min(1),
     TURSO_AUTH_TOKEN: z.string().min(1).optional(),
     CRON_SECRET: z.string().min(16),
