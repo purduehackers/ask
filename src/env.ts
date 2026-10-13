@@ -11,8 +11,7 @@ export const env = createEnv({
     CRON_SECRET: z.string().min(16),
     BETTER_AUTH_SECRET: z.string().min(1),
     PHACK_CLIENT_ID: z.string().min(1),
-    KV_REST_API_URL: z.url(),
-    KV_REST_API_TOKEN: z.string().min(1),
+    REDIS_URL: z.url({ protocol: /^rediss?$/ }),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.url(),

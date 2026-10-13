@@ -41,6 +41,7 @@ BETTER_AUTH_SECRET=
 PHACK_CLIENT_ID=
 PHACK_CLIENT_SECRET=
 NEXT_PUBLIC_APP_URL=
+REDIS_URL=redis://localhost:6379
 ```
 
 ### Setup
@@ -73,3 +74,22 @@ Returns `{ "result": "..." }`.
 
 - Anonymous (web UI): 5 requests/hour
 - Authenticated: 30 requests/hour
+
+## Redis
+
+Set `REDIS_URL` to `rediss://ask:<password>@redis.server.purduehackers.com:6379`
+in Vercel. The server connects lazily over TCP/TLS and uses the named ACL user.
+The `KV_REST_API_URL` and `KV_REST_API_TOKEN` variables are no longer read.
+
+Before switching, pause chat writes and copy `chat:*` records with their values
+and remaining TTLs. Metadata and message histories live in Redis for 30 days;
+starting with an empty database would lose that history. Copy `ratelimit:*`
+counters too, or deliberately allow quotas to reset at cutover.
+
+The atomic Redis rate limiter keeps the existing five anonymous / thirty
+authenticated requests per hour and the same weighted sliding-window buckets.
+Redis failures reject the operation; they do not bypass the quota.
+
+Run `REDIS_TEST_URL=redis://localhost:6379 bun test` to check concurrent requests,
+quota boundaries, and compatibility with existing rate-limit counters. Tests
+use unique `migration-test:ask:*` keys and remove them afterward.
