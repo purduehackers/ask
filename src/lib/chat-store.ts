@@ -1,5 +1,5 @@
 import type { UIMessage } from "ai";
-import { redis } from "./redis";
+import { getRedis } from "./redis";
 
 const TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
 
@@ -20,34 +20,40 @@ function messagesKey(id: string) {
 
 export async function createChat(id: string, ownerId: string | null): Promise<void> {
   const meta: ChatMeta = { ownerId, createdAt: Date.now() };
-  await redis.set(metaKey(id), meta, { ex: TTL_SECONDS });
+  await (await getRedis()).set(metaKey(id), JSON.stringify(meta), { EX: TTL_SECONDS });
 }
 
 export async function getChatMeta(id: string): Promise<ChatMeta | null> {
-  return redis.get<ChatMeta>(metaKey(id));
+  const raw = await (await getRedis()).get(metaKey(id));
+  return raw === null ? null : (JSON.parse(raw) as ChatMeta);
 }
 
 async function updateChatMeta(id: string, updates: Partial<ChatMeta>): Promise<void> {
   const meta = await getChatMeta(id);
   if (!meta) return;
   Object.assign(meta, updates);
-  await redis.set(metaKey(id), meta, { ex: TTL_SECONDS });
+  await (await getRedis()).set(metaKey(id), JSON.stringify(meta), { EX: TTL_SECONDS });
 }
 
 export async function claimChat(id: string, ownerId: string): Promise<boolean> {
   const meta = await getChatMeta(id);
   if (!meta) return false;
   if (meta.ownerId !== null) return meta.ownerId === ownerId;
-  await redis.set(metaKey(id), { ...meta, ownerId }, { ex: TTL_SECONDS });
+  await (
+    await getRedis()
+  ).set(metaKey(id), JSON.stringify({ ...meta, ownerId }), {
+    EX: TTL_SECONDS,
+  });
   return true;
 }
 
 export async function getChatMessages(id: string): Promise<UIMessage[] | null> {
-  return redis.get<UIMessage[]>(messagesKey(id));
+  const raw = await (await getRedis()).get(messagesKey(id));
+  return raw === null ? null : (JSON.parse(raw) as UIMessage[]);
 }
 
 export async function saveChatMessages(id: string, messages: UIMessage[]): Promise<void> {
-  await redis.set(messagesKey(id), messages, { ex: TTL_SECONDS });
+  await (await getRedis()).set(messagesKey(id), JSON.stringify(messages), { EX: TTL_SECONDS });
 }
 
 export async function setWorkflowRunId(id: string, workflowRunId: string): Promise<void> {
