@@ -13,7 +13,7 @@ export async function createAgent() {
   });
 
   return new ToolLoopAgent({
-    model: "anthropic/claude-sonnet-4.6",
+    model: "deepseek/deepseek-v4-flash-0731",
     instructions: systemPrompt,
     tools,
     stopWhen: stepCountIs(30),

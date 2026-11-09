@@ -4,12 +4,12 @@ An AI-powered Q&A tool that answers questions about Purdue Hackers using their N
 
 ## How it works
 
-The app syncs Purdue Hackers' Notion workspace into a cached filesystem. When a user asks a question, an AI agent (Claude Sonnet) navigates and searches the filesystem using bash commands to find relevant information, then synthesizes a natural-language answer.
+The app syncs Purdue Hackers' Notion workspace into a cached filesystem. When a user asks a question, an AI agent (DeepSeek V4 Flash 0731) navigates and searches the filesystem using bash commands to find relevant information, then synthesizes a natural-language answer.
 
 ## Stack
 
 - **Framework**: Next.js 16, React 19
-- **AI**: Vercel AI SDK v6, Anthropic Claude Sonnet
+- **AI**: Vercel AI SDK v6, DeepSeek V4 Flash 0731 (`deepseek/deepseek-v4-flash-0731`)
 - **Auth**: Better Auth with Purdue Hackers Passport Auth
 - **Database**: Turso (libsql) via Drizzle ORM
 - **Notion sync**: AgentFS SDK + bash-tool for filesystem exploration
