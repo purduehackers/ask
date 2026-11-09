@@ -85,7 +85,7 @@ export async function chatWorkflow(
   const writable = getWritable<UIMessageChunk>();
 
   const agent = new DurableAgent({
-    model: "anthropic/claude-sonnet-4-6",
+    model: "deepseek/deepseek-v4-flash-0731",
     system: systemPrompt,
     tools,
   });
